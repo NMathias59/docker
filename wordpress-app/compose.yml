@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  wordpress:
+    image: wordpress:latest
+    env_file:
+      - .env
+    environment:
+      WORDPRESS_DB_PASSWORD_FILE: /run/secrets/db_password
+      WORDPRESS_AUTH_KEY_FILE: /run/secrets/wp_auth_key
+      WORDPRESS_SECURE_AUTH_KEY_FILE: /run/secrets/wp_secure_auth_key
+      WORDPRESS_LOGGED_IN_KEY_FILE: /run/secrets/wp_logged_in_key
+      WORDPRESS_NONCE_KEY_FILE: /run/secrets/wp_nonce_key
+    ports:
+      - "8080:80"
+    secrets:
+      - db_password
+      - wp_auth_key
+      - wp_secure_auth_key
+      - wp_logged_in_key
+      - wp_nonce_key
+    depends_on:
+      - db
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD_FILE: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+    volumes:
+      - db_data:/var/lib/mysql
+    secrets:
+      - db_password
+      - db_root_password
+
+volumes:
+  db_data:
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+  wp_auth_key:
+    file: ./secrets/wp_auth_key.txt
+  wp_secure_auth_key:
+    file: ./secrets/wp_secure_auth_key.txt
+  wp_logged_in_key:
+    file: ./secrets/wp_logged_in_key.txt
+  wp_nonce_key:
+    file: ./secrets/wp_nonce_key.txt
