@@ -44,7 +44,10 @@ docker compose -f compose.yml up -d
 - Ne stockez jamais de secrets dans `.env` ou dans le dépôt Git.
 - Utilisez Docker Secrets pour toute valeur sensible.
 - Documentez et adaptez les variables d'environnement selon vos besoins.
-
 ---
 
+
+
 Pour toute question, ouvrez une issue sur ce dépôt.
+
+
